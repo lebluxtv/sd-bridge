@@ -1,0 +1,1458 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SD Bridge Docs</title>
+<link rel="icon" type="image/png" href="assets/sd-bridge-logo.png">
+<meta name="description" content="Documentation for SD Bridge, a Streamer.bot addon for direct Stream Deck profile and page navigation.">
+<style>
+:root{
+  --bg:#0b0c10;
+  --bg-soft:#101218;
+  --panel:#13161e;
+  --panel-2:#171a24;
+  --panel-3:#1d2230;
+  --text:#f1f3f7;
+  --muted:#9ba3b3;
+  --faint:#70798b;
+  --line:#252a36;
+  --line-strong:#323949;
+  --accent:#8b5cf6;
+  --accent-2:#a78bfa;
+  --accent-soft:rgba(139,92,246,.14);
+  --green:#5bd7a7;
+  --blue:#6ea8ff;
+  --red:#ff7f98;
+  --yellow:#efc66a;
+  --code:#0a0c12;
+  --header:64px;
+  --left:272px;
+  --right:220px;
+  --content:860px;
+  --site-max:1480px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:var(--header)}
+section[id],div#introduction{scroll-margin-top:var(--header)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.7}
+a{color:var(--accent-2);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:"Cascadia Code",Consolas,ui-monospace,monospace;font-size:.9em;background:#1a1e29;border:1px solid #2b3140;padding:.12rem .34rem;border-radius:5px;color:#e7e9ff}
+pre{margin:1rem 0;background:var(--code);border:1px solid var(--line);border-radius:10px;padding:16px 18px;overflow:auto;box-shadow:inset 0 1px 0 rgba(255,255,255,.02)}
+pre code{background:none;border:0;padding:0;color:#e9edf6;font-size:13px;line-height:1.65}
+h1,h2,h3{letter-spacing:-.025em;line-height:1.22}
+h1{font-size:2.25rem;margin:.4rem 0 1rem}
+h2{font-size:1.55rem;margin:3.2rem 0 1rem;padding-top:.4rem}
+h3{font-size:1.05rem;margin:1.8rem 0 .6rem}
+p{color:#c9cfda}
+ul,ol{color:#c9cfda;padding-left:1.4rem}
+li{margin:.35rem 0}
+strong{color:#f5f7fa}
+hr{border:0;border-top:1px solid var(--line);margin:3rem 0}
+
+.topbar{position:sticky;top:0;z-index:100;height:var(--header);background:rgba(11,12,16,.9);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.topbar-inner{height:100%;display:grid;grid-template-columns:var(--left) minmax(0,1fr) auto;align-items:center;gap:18px;padding:0 22px;max-width:var(--site-max);margin:0 auto;width:100%}
+.brand{display:flex;align-items:center;gap:11px;color:var(--text);font-weight:800;font-size:16px;text-decoration:none}
+.brand:hover{text-decoration:none}
+.brand-logo{width:30px;height:30px;object-fit:contain;display:block;filter:drop-shadow(0 0 12px rgba(139,92,246,.16))}
+.brand span small{display:block;color:var(--muted);font-weight:600;font-size:10px;letter-spacing:.04em;margin-top:-2px}
+.search-wrap{max-width:680px;justify-self:center;width:100%;position:relative}
+.search{width:100%;height:38px;border:1px solid var(--line);border-radius:8px;background:#11141b;color:var(--text);padding:0 40px 0 36px;outline:none}
+.search:focus{border-color:#6651b6;box-shadow:0 0 0 3px rgba(139,92,246,.09)}
+.search-icon{position:absolute;left:12px;top:9px;color:var(--muted);font-size:14px}
+.search-key{position:absolute;right:8px;top:7px;border:1px solid var(--line-strong);border-radius:5px;padding:1px 6px;color:var(--faint);font-size:11px;background:#151821}
+.header-actions{display:flex;align-items:center;gap:8px}
+.header-pill{height:34px;display:inline-flex;align-items:center;padding:0 11px;border:1px solid var(--line);border-radius:8px;background:#11141b;color:#c7cddd;font-size:12px;font-weight:700;text-decoration:none}
+.header-pill:hover{text-decoration:none;background:#171a23;border-color:var(--line-strong)}
+.menu-btn{display:none;border:1px solid var(--line);background:#12151d;color:white;border-radius:8px;width:38px;height:34px}
+
+.shell{display:grid;grid-template-columns:var(--left) minmax(0,1fr) 250px;min-height:calc(100vh - var(--header));max-width:var(--site-max);margin:0 auto;width:100%}
+.sidebar{position:sticky;top:var(--header);height:calc(100vh - var(--header));overflow:auto;border-right:1px solid var(--line);padding:22px 18px 40px;background:#0d0f14}
+.sidebar-title{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:#777f90;font-weight:800;margin:20px 10px 8px}
+.sidebar-title:first-child{margin-top:0}
+.nav-link{display:flex;align-items:center;gap:8px;min-height:34px;padding:6px 10px;border-radius:7px;color:#aeb5c2;font-size:13px;font-weight:600;text-decoration:none}
+.nav-link:hover{text-decoration:none;color:white;background:#151821}
+.nav-link.active{color:#cfc4ff;background:var(--accent-soft)}
+.nav-dot{width:5px;height:5px;border-radius:50%;background:#596071}
+.nav-link.active .nav-dot{background:var(--accent-2)}
+.sidebar-footer{margin:28px 10px 0;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:11px}
+
+.main{min-width:0;padding:38px 48px 80px}
+.content{max-width:var(--content);margin:0 auto}
+.breadcrumbs{display:flex;gap:8px;align-items:center;color:var(--faint);font-size:12px;margin-bottom:14px}
+.breadcrumbs span:last-child{color:#b9c0ce}
+.lead{font-size:1.04rem;color:#aeb6c5;max-width:760px}
+.version-chip{display:inline-flex;align-items:center;gap:7px;color:#cfc4ff;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.28);padding:4px 9px;border-radius:999px;font-size:11px;font-weight:800}
+.version-chip:before{content:"";width:6px;height:6px;background:#a78bfa;border-radius:50%;box-shadow:0 0 10px #8b5cf6}
+
+.hero-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:26px 0 12px}
+.hero-card{display:block;border:1px solid var(--line);background:linear-gradient(180deg,#13161e,#101219);border-radius:11px;padding:16px;color:inherit;text-decoration:none;min-height:126px}
+.hero-card:hover{text-decoration:none;border-color:#3a4152;background:#171a23;transform:translateY(-1px)}
+.hero-card .icon{width:30px;height:30px;border-radius:8px;background:#1f2430;display:grid;place-items:center;margin-bottom:12px;color:#cabfff;font-weight:900}
+.hero-card strong{display:block;font-size:14px;margin-bottom:4px}
+.hero-card span{display:block;color:var(--muted);font-size:12px;line-height:1.5}
+
+.callout{border:1px solid #37304f;border-left:3px solid var(--accent);background:rgba(139,92,246,.07);border-radius:9px;padding:13px 15px;margin:1.2rem 0;color:#cbd1dc}
+.callout strong{display:block;color:#ddd5ff;margin-bottom:3px}
+.callout.warning{border-color:#4a3d25;border-left-color:var(--yellow);background:rgba(239,198,106,.06)}
+.callout.warning strong{color:#f1d998}
+.callout.success{border-color:#24483b;border-left-color:var(--green);background:rgba(91,215,167,.055)}
+.callout.success strong{color:#a6efd2}
+
+.step-list{counter-reset:step;display:grid;gap:10px;margin:18px 0}
+.step{position:relative;border:1px solid var(--line);border-radius:10px;background:#10131a;padding:16px 16px 16px 54px}
+.step:before{counter-increment:step;content:counter(step);position:absolute;left:15px;top:15px;width:26px;height:26px;display:grid;place-items:center;border-radius:7px;background:#231d38;border:1px solid #493c72;color:#cabfff;font-size:12px;font-weight:900}
+.step h3{margin:0 0 5px;font-size:14px}
+.step p{margin:.35rem 0}
+.step ul{margin:.5rem 0 0}
+
+.action-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.action-card{border:1px solid var(--line);border-radius:10px;background:#10131a;padding:16px}
+.action-card h3{margin:0 0 7px;font-size:14px}
+.action-name{font-family:"Cascadia Code",Consolas,monospace;color:#b7bfce;background:#0b0d12;border:1px solid var(--line);border-radius:7px;padding:9px 10px;font-size:11px;line-height:1.5;margin:.7rem 0}
+
+.spec-table{width:100%;border-collapse:separate;border-spacing:0;margin:1rem 0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.spec-table th,.spec-table td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}
+.spec-table th{background:#141821;color:#dce1e9}
+.spec-table td{color:#b9c0cc}
+.spec-table tr:last-child td{border-bottom:0}
+
+.tree{font-family:"Cascadia Code",Consolas,monospace;white-space:pre;background:#0a0c12;border:1px solid var(--line);border-radius:10px;padding:16px;color:#bec7d5;overflow:auto;font-size:12px;line-height:1.65}
+
+.release{border:1px solid var(--line);border-radius:9px;background:#10131a;margin:9px 0;overflow:hidden}
+.release summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 14px;cursor:pointer}
+.release summary::-webkit-details-marker{display:none}
+.release summary:before{content:"›";color:#7e8797;font-size:18px;margin-right:7px;transition:.18s}
+.release[open] summary:before{transform:rotate(90deg)}
+.release-title{display:flex;align-items:center;gap:7px;font-weight:800;color:#e8ebf1;flex:1}
+.release-count{color:var(--faint);font-size:11px}
+.release-tag{font-weight:600;color:#9da5b4;font-size:11px}
+.latest-tag{font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#d1c6ff;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);border-radius:999px;padding:2px 6px}
+.release-body{border-top:1px solid var(--line);padding:6px 15px 12px}
+.change-group{display:grid;grid-template-columns:76px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.change-group:last-child{border-bottom:0}
+.change-label{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding-top:4px}
+.change-label.new{color:var(--green)} .change-label.update{color:var(--blue)} .change-label.fix{color:var(--red)}
+.change-group ul{margin:0;padding-left:18px}
+.change-group li{font-size:12px;color:#aeb6c3}
+
+
+.search-results{display:none;position:absolute;left:0;right:0;top:44px;max-height:360px;overflow:auto;border:1px solid var(--line-strong);border-radius:10px;background:#11141b;box-shadow:0 18px 55px rgba(0,0,0,.45);padding:6px;z-index:150}
+.search-results.show{display:block}
+.result{display:block;border-radius:7px;padding:9px 10px;color:#cbd1da;text-decoration:none;font-size:12px}
+.result:hover{background:#1b1f2a;text-decoration:none}
+.result strong{display:block;font-size:12px}
+.result span{display:block;color:#747e8f;font-size:10px;margin-top:2px}
+
+.footer{margin-top:4rem;padding-top:1.5rem;border-top:1px solid var(--line);color:#697284;font-size:11px;display:flex;justify-content:space-between;gap:20px}
+
+
+.download-rail{
+  position:sticky;
+  top:var(--header);
+  height:calc(100vh - var(--header));
+  padding:28px 18px;
+  border-left:1px solid var(--line);
+  background:#0c0e13;
+  overflow:auto;
+}
+.download-card{
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:linear-gradient(180deg,#13161e,#101219);
+  padding:15px;
+}
+.download-card h4{
+  margin:0 0 4px;
+  font-size:13px;
+}
+.download-card .version{
+  color:var(--muted);
+  font-size:11px;
+  margin-bottom:14px;
+}
+.download-btn{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  width:100%;
+  padding:10px 11px;
+  margin-top:8px;
+  border:1px solid #4a3b7d;
+  border-radius:8px;
+  background:linear-gradient(180deg,#312653,#251d42);
+  color:#f0ecff;
+  font-weight:800;
+  font-size:12px;
+  text-decoration:none;
+}
+.download-btn:hover{
+  text-decoration:none;
+  border-color:#6a55ac;
+  background:linear-gradient(180deg,#3a2c63,#2a2149);
+}
+.download-btn.secondary{
+  border-color:var(--line-strong);
+  background:#151821;
+  color:#c8cfdb;
+}
+.download-btn.secondary:hover{
+  background:#1a1e29;
+  border-color:#41495b;
+}
+.download-meta{
+  margin-top:14px;
+  padding-top:13px;
+  border-top:1px solid var(--line);
+  color:#778092;
+  font-size:10px;
+  line-height:1.55;
+}
+.download-meta strong{
+  display:block;
+  color:#aeb6c5;
+  font-size:10px;
+  margin-bottom:3px;
+}
+.download-icon{
+  width:24px;
+  height:24px;
+  border-radius:6px;
+  display:grid;
+  place-items:center;
+  background:rgba(139,92,246,.15);
+  color:#cfc4ff;
+  flex:none;
+}
+
+
+.github-issues-link,.github-source-link{font-weight:800}
+.github-issues-link[aria-disabled="true"],.github-source-link[aria-disabled="true"]{
+  color:var(--muted);
+  text-decoration:none;
+  cursor:default;
+}
+
+
+.inline-download{
+  display:none;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  width:max-content;
+  max-width:100%;
+  margin-top:12px;
+  padding:9px 11px;
+  border:1px solid #4a3b7d;
+  border-radius:8px;
+  background:linear-gradient(180deg,#312653,#251d42);
+  color:#f0ecff;
+  font-weight:800;
+  font-size:12px;
+  text-decoration:none;
+}
+.inline-download:hover{
+  text-decoration:none;
+  border-color:#6a55ac;
+  background:linear-gradient(180deg,#3a2c63,#2a2149);
+}
+
+.demo-card{
+  margin-top:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:22px;
+  border:1px solid var(--line);
+  border-radius:11px;
+  background:linear-gradient(180deg,#13161e,#101219);
+  padding:18px;
+}
+.demo-copy{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  min-width:0;
+}
+.demo-copy h3{
+  margin:0 0 5px;
+  font-size:14px;
+}
+.demo-copy p{
+  margin:0;
+  color:#c9cfda;
+}
+.demo-note{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:11px;
+}
+.demo-icon{
+  width:38px;
+  height:38px;
+  flex:none;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+  border:1px solid rgba(139,92,246,.28);
+  background:rgba(139,92,246,.12);
+  color:#d8d0ff;
+  font-size:13px;
+  padding-left:2px;
+}
+.demo-button{
+  flex:none;
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  min-height:38px;
+  padding:0 13px;
+  border:1px solid #4a3b7d;
+  border-radius:8px;
+  background:linear-gradient(180deg,#312653,#251d42);
+  color:#f0ecff;
+  font:inherit;
+  font-size:12px;
+  font-weight:800;
+  cursor:pointer;
+}
+.demo-button:hover{
+  border-color:#6a55ac;
+  background:linear-gradient(180deg,#3a2c63,#2a2149);
+}
+
+.demo-modal{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:28px;
+}
+.demo-modal.open{display:flex}
+.demo-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(3,5,9,.82);
+  backdrop-filter:blur(7px);
+}
+.demo-dialog{
+  position:relative;
+  z-index:1;
+  width:min(1080px,94vw);
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid #313848;
+  border-radius:14px;
+  background:#0d1016;
+  box-shadow:0 30px 90px rgba(0,0,0,.6);
+}
+.demo-dialog-header{
+  height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:0 14px 0 18px;
+  border-bottom:1px solid var(--line);
+}
+.demo-dialog-title{
+  min-width:0;
+}
+.demo-dialog-title strong{
+  display:block;
+  font-size:13px;
+}
+.demo-dialog-title span{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:1px;
+}
+.demo-close{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:#131721;
+  color:#d8dde6;
+  font-size:19px;
+  line-height:1;
+  cursor:pointer;
+}
+.demo-close:hover{
+  background:#1a1f2a;
+  border-color:var(--line-strong);
+}
+.demo-player{
+  position:relative;
+  aspect-ratio:16/9;
+  background:#07090d;
+  display:grid;
+  place-items:center;
+}
+.demo-player video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:none;
+}
+.demo-placeholder{
+  max-width:460px;
+  padding:30px;
+  text-align:center;
+  color:var(--muted);
+}
+.demo-placeholder .play{
+  width:54px;
+  height:54px;
+  margin:0 auto 14px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  border:1px solid rgba(139,92,246,.35);
+  background:rgba(139,92,246,.12);
+  color:#d8d0ff;
+  font-size:18px;
+  padding-left:3px;
+}
+.demo-placeholder strong{
+  display:block;
+  color:#e6e9ef;
+  margin-bottom:5px;
+}
+body.demo-open{overflow:hidden}
+
+@media(max-width:1100px){
+  .shell{grid-template-columns:var(--left) minmax(0,1fr);max-width:none}
+  .download-rail{display:none}
+  .inline-download{display:inline-flex}
+  .topbar-inner{grid-template-columns:var(--left) minmax(0,1fr) auto}
+}
+@media(max-width:780px){
+  .demo-card{align-items:flex-start;flex-direction:column}
+  .demo-button{width:100%;justify-content:space-between}
+  .demo-modal{padding:12px}
+  .demo-dialog{width:100%;max-height:94vh}
+  :root{--header:58px}
+  .topbar-inner{grid-template-columns:1fr auto;padding:0 14px}
+  .search-wrap{display:none}
+  .header-actions .header-pill{display:none}
+  .menu-btn{display:block}
+  .shell{display:block}
+  .sidebar{position:fixed;z-index:90;top:var(--header);left:0;width:280px;transform:translateX(-105%);transition:.2s;box-shadow:20px 0 50px rgba(0,0,0,.4)}
+  .sidebar.open{transform:translateX(0)}
+  .main{padding:28px 20px 60px}
+  .hero-cards,.action-row{grid-template-columns:1fr}
+  .change-group{grid-template-columns:1fr}
+  .release-count{display:none}
+  h1{font-size:1.9rem}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#introduction">
+      <img class="brand-logo" src="assets/sd-bridge-logo.png" alt="" aria-hidden="true">
+      <span>SD Bridge<small>Documentation</small></span>
+    </a>
+
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input id="docSearch" class="search" placeholder="Search documentation…" autocomplete="off">
+      <span class="search-key">/</span>
+      <div id="searchResults" class="search-results"></div>
+    </div>
+
+    <div class="header-actions">
+      <span class="header-pill">v0.19.0</span>
+      <a class="header-pill" href="https://docs.streamer.bot/" target="_blank" rel="noopener">Streamer.bot Docs ↗</a>
+      <button id="menuBtn" class="menu-btn" aria-label="Open navigation">☰</button>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-title">Overview</div>
+    <a class="nav-link active" href="#introduction"><span class="nav-dot"></span>Introduction</a>
+    <a class="nav-link" href="#what-it-does"><span class="nav-dot"></span>What it does</a>
+    <a class="nav-link" href="#tested-on"><span class="nav-dot"></span>Tested on</a>
+
+    <div class="sidebar-title">Getting Started</div>
+    <a class="nav-link" href="#installation"><span class="nav-dot"></span>Installation</a>
+    <a class="nav-link" href="#setup"><span class="nav-dot"></span>Setup / Update</a>
+    <a class="nav-link" href="#validation"><span class="nav-dot"></span>Validation</a>
+    <a class="nav-link" href="#cleanup"><span class="nav-dot"></span>Cleanup</a>
+
+    <div class="sidebar-title">Usage</div>
+    <a class="nav-link" href="#switchpage"><span class="nav-dot"></span>SwitchPage</a>
+    <a class="nav-link" href="#csharp-example"><span class="nav-dot"></span>C# example</a>
+    <a class="nav-link" href="#subactions-example"><span class="nav-dot"></span>Sub-Actions example</a>
+    <a class="nav-link" href="#arguments"><span class="nav-dot"></span>Arguments</a>
+
+    <div class="sidebar-title">Reference</div>
+    <a class="nav-link" href="#source-code"><span class="nav-dot"></span>Source code</a>
+    <a class="nav-link" href="#credits"><span class="nav-dot"></span>Origin & credits</a>
+    <a class="nav-link" href="#changelog"><span class="nav-dot"></span>Changelog</a>
+
+    <div class="sidebar-footer">
+      SD Bridge is a separate community project extending the official Streamer.bot Stream Deck plugin work.
+    </div>
+  </aside>
+
+  <main class="main">
+    <article class="content">
+      <div id="introduction" data-search="Introduction overview addon Streamer.bot Stream Deck profiles pages">
+        <div class="breadcrumbs"><span>SD Bridge</span><span>›</span><span>Overview</span></div>
+        <span class="version-chip">v0.19.0</span>
+        <h1>SD Bridge</h1>
+        <p class="lead">A Streamer.bot addon for directly switching the <strong>profile</strong> and <strong>page</strong> displayed on a Stream Deck.</p>
+
+        <div class="hero-cards">
+          <a class="hero-card" href="#installation">
+            <div class="icon">→</div>
+            <strong>Get started</strong>
+            <span>Import the Streamer.bot action, launch Setup Bridge, and create your first bridged profile.</span>
+          </a>
+          <a class="hero-card" href="#switchpage">
+            <div class="icon">⌘</div>
+            <strong>Use SwitchPage</strong>
+            <span>Target a Bridge profile and page by name or 1-based page number.</span>
+          </a>
+          <a class="hero-card" href="#source-code">
+            <div class="icon">&lt;/&gt;</div>
+            <strong>Explore the source</strong>
+            <span>See how the single C# Core embeds plugin.js, icons, and the validation profile.</span>
+          </a>
+        </div>
+
+        <div class="callout">
+          <strong>Designed to coexist with the official plugin</strong>
+          SD Bridge does not replace the official Streamer.bot Stream Deck plugin. Its purpose is to add direct Stream Deck profile/page navigation from Streamer.bot.
+        </div>
+      </div>
+
+      <section id="what-it-does" data-search="What it does profile page bridge copy">
+        <h2>What it does</h2>
+        <p>Streamer.bot can interact with Stream Deck buttons, but the normal integration does not provide direct navigation between Stream Deck profiles and pages. SD Bridge adds that navigation layer.</p>
+        <p>Setup creates an editable <code>[Bridge]</code> copy of the selected profile:</p>
+        <pre><code>"My Profile"
+        ↓
+"My Profile [Bridge]"</code></pre>
+        <p>The <code>[Bridge]</code> version becomes the working profile you continue editing in the Stream Deck application. The live Bridge profile remains the source of truth when SD Bridge is updated later.</p>
+      </section>
+
+      <section id="tested-on" data-search="Tested hardware Windows 11 Stream Deck XL 7.5.1 Streamer.bot 1.0.7">
+        <h2>Tested on</h2>
+        <table class="spec-table">
+          <tr><th>Platform</th><td>Windows 11</td></tr>
+          <tr><th>Hardware</th><td>Stream Deck XL</td></tr>
+          <tr><th>Stream Deck App</th><td>v7.5.1</td></tr>
+          <tr><th>Streamer.bot</th><td>v1.0.7</td></tr>
+        </table>
+        <div class="callout warning">
+          <strong>Hardware feedback wanted</strong>
+          Other Stream Deck models are supported by the code path but have not all been validated on real hardware yet.
+          If you test MK.2, Mini, +, Neo, Studio, or a multi-device setup, please <a class="github-issues-link" href="#" aria-disabled="true">open a GitHub Issue</a> and include your Stream Deck model, Stream Deck App version, Streamer.bot version, and what happened.
+        </div>
+      </section>
+
+      <hr>
+
+      <section id="installation" data-search="Installation download sb import action Setup Bridge Test Trigger demo video">
+        <div class="breadcrumbs"><span>Getting Started</span><span>›</span><span>Installation</span></div>
+        <h2>Installation</h2>
+        <div class="step-list">
+          <div class="step">
+            <h3>Import the Streamer.bot action</h3>
+            <p>Use the <strong>Download Streamer.bot Action</strong> button in the Download panel on the right, then import the <strong>.sb</strong> file into Streamer.bot.</p>
+            <a class="inline-download" href="assets/SD-Bridge-v0.19.0.sb" download>
+              <span>Download Streamer.bot Action</span>
+              <span aria-hidden="true">↓</span>
+            </a>
+          </div>
+          <div class="step">
+            <h3>Select the Setup Action</h3>
+            <div class="action-name">01 - Streamer.bot StreamDeck Plugin Addon - Setup Bridge</div>
+          </div>
+          <div class="step">
+            <h3>Launch the WPF setup</h3>
+            <p>Right-click <strong>Test</strong>, then choose <strong>Test Trigger</strong>. The SD Bridge setup window opens.</p>
+          </div>
+        </div>
+
+        <div class="demo-card">
+          <div class="demo-copy">
+            <div class="demo-icon" aria-hidden="true">▶</div>
+            <div>
+              <h3>Demo</h3>
+              <p>Watch the complete Setup Bridge workflow without leaving the documentation. Playback starts immediately.</p>
+              <span class="demo-note">The 1:39 demo opens in a pop-up over this page.</span>
+            </div>
+          </div>
+          <button class="demo-button" id="openDemo" type="button">
+            <span>Watch demo</span>
+            <span aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="setup" data-search="Setup Update WPF available to bridge validation generate plugin install profiles copy name">
+        <h2>Setup / Update</h2>
+        <p>The setup window scans the Stream Deck profiles available on the computer and separates them into existing Bridges and profiles that can be bridged.</p>
+        <div class="step-list">
+          <div class="step">
+            <h3>Select the profile(s) to bridge</h3>
+            <p>Choose the profile you want Streamer.bot to control. Existing <code>[Bridge]</code> profiles are preserved automatically.</p>
+          </div>
+          <div class="step">
+            <h3>Keep the validation profile for the first XL setup</h3>
+            <p>If no live Bridge is detected on a Stream Deck XL setup, <strong>Bridge Validation Test</strong> is selected by default so both profile switching and page switching can be verified.</p>
+          </div>
+          <div class="step">
+            <h3>Generate the companion plugin</h3>
+            <p>Click <strong>Generate plugin</strong> or <strong>Update plugin</strong>. SD Bridge creates the companion <code>.streamDeckPlugin</code> package and opens it automatically.</p>
+          </div>
+          <div class="step">
+            <h3>Confirm the plugin installation</h3>
+            <p>Stream Deck first asks whether you want to install the <strong>SD Bridge</strong> plugin. Click <strong>Install</strong>.</p>
+          </div>
+          <div class="step">
+            <h3>Install the preconfigured profile(s)</h3>
+            <p>If the generated package contains preconfigured profiles — for example the recommended <strong>Bridge Validation Test</strong> profile — Stream Deck displays a second prompt. Click <strong>Install Profile(s)</strong>. The WPF then watches for the imported profile copies and checks their page structure.</p>
+          </div>
+        </div>
+        <div class="callout success">
+          <strong>Exact profile name</strong>
+          Need the exact value for <code>sdBridge.profile</code>? Use <strong>Copy name</strong> in the WPF.
+        </div>
+      </section>
+
+      <section id="validation" data-search="Validation Start test Yes everything worked No something wrong diagnostic report Desktop">
+        <h2>Validation</h2>
+        <p>Once the imported profiles are detected and their page structure matches the generated package, the WPF enables the validation sequence.</p>
+        <ol>
+          <li>Click <strong>Start test</strong>.</li>
+          <li>Watch the physical Stream Deck switch across several profiles and pages.</li>
+          <li>The sequence returns to the first real <code>[Bridge]</code> profile.</li>
+          <li>Confirm with <strong>Yes, everything worked</strong> if the result is correct.</li>
+        </ol>
+        <div class="callout warning">
+          <strong>If the validation fails</strong>
+          Click <strong>No / something was wrong</strong>, complete the short questionnaire, and create the diagnostic report. The <code>.txt</code> report is generated on the Desktop and no original profile is removed.
+        </div>
+      </section>
+
+      <section id="cleanup" data-search="Cleanup backup remove original non bridged profile validation test Remove now">
+        <h2>Cleanup</h2>
+        <p>After a successful full validation, SD Bridge offers two independent cleanup choices:</p>
+        <ul>
+          <li><strong>Original non-bridged profile(s)</strong> — keep them or remove them.</li>
+          <li><strong>Bridge Validation Test</strong> — keep it for later testing or remove the temporary test profile.</li>
+        </ul>
+        <p><strong>Remove now</strong> closes Stream Deck when required, creates and verifies a safety backup, removes the selected data, and restarts Stream Deck when possible.</p>
+        <div class="callout">
+          <strong>After conversion</strong>
+          Work in the <code>[Bridge]</code> profile. Re-running Setup / Update updates the same Bridge rather than creating <code>[Bridge] [Bridge]</code>.
+        </div>
+      </section>
+
+      <hr>
+
+      <section id="switchpage" data-search="SwitchPage usage examples C# sub-actions page name number">
+        <div class="breadcrumbs"><span>Usage</span><span>›</span><span>SwitchPage</span></div>
+        <h2>Using SwitchPage</h2>
+        <p>The imported Streamer.bot package contains two example actions. Both eventually call the same public <code>SwitchPage()</code> method in the SD Bridge Core.</p>
+        <div class="action-row">
+          <a class="hero-card" href="#csharp-example">
+            <div class="icon">C#</div>
+            <strong>C# example</strong>
+            <span>Edit two variables in a short wrapper and call the Core method.</span>
+          </a>
+          <a class="hero-card" href="#subactions-example">
+            <div class="icon">SA</div>
+            <strong>Sub-Actions example</strong>
+            <span>Set two Streamer.bot arguments without editing C#.</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="csharp-example" data-search="C# example profile page variables">
+        <h2>C# example</h2>
+        <div class="action-name">0x - Streamer.bot StreamDeck Plugin Addon - SwitchPage Exemple (with C#)</div>
+        <p>Edit the profile and page values in the example:</p>
+        <pre><code>string profile = "My Profile [Bridge]";
+string page = "JDR";</code></pre>
+        <p>The wrapper sets the expected arguments and calls the Core's <code>SwitchPage()</code> method.</p>
+      </section>
+
+      <section id="subactions-example" data-search="Sub-Actions example Set Argument Execute C# Method SwitchPage">
+        <h2>Sub-Actions example</h2>
+        <div class="action-name">0x - Streamer.bot StreamDeck Plugin Addon - SwitchPage Exemple (with Sub-Actions)</div>
+        <p>Edit the first two <strong>Set Argument</strong> sub-actions:</p>
+        <pre><code>sdBridge.profile = My Profile [Bridge]
+sdBridge.page = JDR</code></pre>
+        <p>The final <strong>Execute C# Method → SwitchPage</strong> sub-action sends those values to the Core. No C# editing is required.</p>
+      </section>
+
+      <section id="arguments" data-search="Arguments sdBridge.profile sdBridge.page number name 1-based">
+        <h2>Arguments</h2>
+        <table class="spec-table">
+          <tr><th>Argument</th><th>Value</th></tr>
+          <tr><td><code>sdBridge.profile</code></td><td>Exact Bridge profile name, stable key, or known alias.</td></tr>
+          <tr><td><code>sdBridge.page</code></td><td>Exact page name or a <strong>1-based</strong> page number.</td></tr>
+        </table>
+        <p>Examples:</p>
+        <pre><code>sdBridge.profile = My Profile [Bridge]
+sdBridge.page = JDR
+
+sdBridge.profile = My Profile [Bridge]
+sdBridge.page = 2</code></pre>
+      </section>
+
+      <hr>
+
+      <section id="source-code" data-search="Source code GitHub PluginJsBase64 manifest ValidationProfileBase64 readable sources">
+        <div class="breadcrumbs"><span>Reference</span><span>›</span><span>Source code</span></div>
+        <h2>Source code</h2>
+        <p>The source is published in the GitHub repository for <strong>transparency and maintainability</strong>. It is not required for normal SD Bridge use.</p>
+        <p>The official SD Bridge logo is locked as the canonical identity and is included under <code>src/branding/</code> in PNG, SVG and ICO formats. The WPF, Stream Deck plugin and website all use that same final logo.</p>
+        <p>The main reason readable source files are kept alongside the single-file C# Core is that the Core embeds the Stream Deck companion assets as Base64. Publishing their readable counterparts makes it possible to inspect, modify, and verify what is actually embedded.</p>
+
+        <table class="spec-table">
+          <tr><th>Readable source</th><th>Embedded / generated form</th></tr>
+          <tr><td><code>src/plugin/bin/plugin.js</code></td><td><code>PluginJsBase64</code></td></tr>
+          <tr><td><code>src/plugin/imgs/plugin/icon.png</code></td><td><code>PluginIconBase64</code></td></tr>
+          <tr><td><code>src/plugin/imgs/actions/bridge/icon.png</code></td><td><code>ActionIconBase64</code></td></tr>
+          <tr><td><code>src/validation-profile/Bridge_Validation_Test_SOURCE.streamDeckProfile</code></td><td><code>ValidationProfileBase64</code></td></tr>
+        </table>
+
+        <p>The Stream Deck <code>manifest.json</code> is generated dynamically by the C# Core because the plugin version and Bridge profile entries depend on the current setup. <code>manifest.template.json</code> is provided as a readable reference.</p>
+
+        <p><a class="github-source-link" href="#" aria-disabled="true">View the source on GitHub</a></p>
+      </section>
+
+      <section id="credits" data-search="Origin credits Whipstickgostop official Streamer.bot Stream Deck plugin derivative fork">
+        <h2>Origin & credits</h2>
+        <p>SD Bridge was originally built from the <strong>official Streamer.bot Stream Deck plugin</strong> and extends that work with the Bridge profile workflow and direct profile/page navigation.</p>
+        <div class="callout">
+          <strong>Original plugin credit</strong>
+          The official Streamer.bot Stream Deck plugin was created by <strong><a href="https://github.com/Whipstickgostop" target="_blank" rel="noopener">Whipstickgostop ↗</a></strong>. SD Bridge is a separate community derivative and does not replace the official plugin.
+        </div>
+        <ul>
+          <li><a href="https://streamdeck.streamer.bot/" target="_blank" rel="noopener">Official Streamer.bot Stream Deck plugin ↗</a></li>
+          <li><a href="https://streamer.bot/" target="_blank" rel="noopener">Streamer.bot ↗</a></li>
+        </ul>
+      </section>
+
+      <section id="changelog" data-search="Changelog version history new update fix">
+        <h2>Changelog</h2>
+        <p>Version history from the first SD Bridge prototype to v0.19.0.</p>
+        
+    <details class="release" open>
+      <summary>
+        <span class="release-title">v0.19.0  <span class="latest-tag">Latest</span></span>
+        <span class="release-count">23 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Custom dark WPF window chrome with SD Bridge branding.</li><li>WPF window position, size, and maximized state are restored between launches.</li><li>Final SD Bridge logo integrated across the WPF, Stream Deck companion plugin, and documentation site.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Companion Stream Deck plugin version bumped to <code>1.19.0.x</code>.</li><li>Plugin/action icons and website branding now use the final SD Bridge identity.</li><li>Documentation site and download references updated for v0.19.0.</li><li>Official <code>SD-Bridge-v0.19.0.sb</code> Streamer.bot action export is now bundled in the package and wired to the documentation download button.</li><li>Installation documentation now distinguishes the Stream Deck plugin confirmation from the separate preconfigured profile installation prompt.</li><li>Documentation demo video is now bundled with the site and opens in the existing in-page modal.</li><li>Readable branding sources added to the public package.</li><li>Official SD Bridge logo locked as the canonical branding asset and applied everywhere without further visual alteration.</li><li>Branding source set now includes the official <code>PNG</code>, <code>SVG</code>, and Windows <code>ICO</code> formats.</li><li>WPF title-bar logo rendering now decodes at small-icon scale to preserve cleaner edges.</li><li>WPF dark surfaces now match Streamer.bot exactly: <code>#202020</code> chrome/background, <code>#272727</code> panels, and <code>#323232</code> content/controls.</li><li>WPF title bar now uses the same background as the main window for a seamless Streamer.bot-style surface.</li><li>WPF outer chrome now uses rounded corners to match the visual form factor of the surrounding desktop apps.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Removed the white native WPF title bar that broke the dark UI consistency.</li><li>Setup and validation keep the same WPF placement during the workflow.</li><li>Saved WPF placement is ignored safely when it is no longer visible on the current desktop layout.</li><li>Removed the visible color break between the custom title bar and the WPF body.</li><li>Removed all remaining previous logo variants from the WPF, Stream Deck plugin assets, and documentation site.</li><li>Reduced the WPF title-bar logo size and improved its rendering to better match Streamer.bot and Stream Deck.</li><li>Demo playback now starts immediately when <strong>Watch demo</strong> is clicked.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.18.0  </span>
+        <span class="release-count">14 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Diagnostic report after failed validation.</li><li>Command expiration to prevent stale switches.</li><li>Corrupted state recovery.</li><li>Transactional profile backup and rollback.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Bridge aliases are preserved and recovered.</li><li>State writes are now atomic.</li><li>Build number recovery hardened.</li><li>WebSocket runtime hardened.</li><li>Multi-device ambiguity is detected explicitly.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Fixed aliases being lost after rebuild.</li><li>Fixed stable Bridge keys being silently changed.</li><li>Fixed cleanup across different drives.</li><li>Fixed partial cleanup failures.</li><li>Fixed stale commands executing after restart.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.17.1 <span class="release-tag">Diagnostics</span> </span>
+        <span class="release-count">6 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Failure questionnaire after validation.</li><li>Automatic support report generated on Desktop.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Validation profile selected automatically when no Bridge is installed.</li><li>Validation detection now prioritizes the actual installed state.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Removed remaining French UI messages.</li><li>Replaced Windows-localized Yes/No dialogs.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.17.0  </span>
+        <span class="release-count">6 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li><code>Copy name</code> button for Bridge profiles.</li><li>Community testing package.</li><li>Developer-readable sources.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Page can be selected by name or number.</li><li>UI/documentation added.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Version inconsistencies cleaned up.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.16.0  </span>
+        <span class="release-count">5 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li><code>Clean / Rebuild state</code> tool.</li><li>Automatic state backup before rebuilding.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>State reconstructed from live Bridge profiles and installed configuration.</li><li>Alias history compacted.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Removed recoverable duplicate and orphaned state entries.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.15.0  </span>
+        <span class="release-count">5 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Rename-safe Bridge recovery.</li><li>Bridge name aliases.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Installed <code>bridge-config.json</code> used for identity recovery.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Renaming a <code>[Bridge]</code> profile no longer breaks existing actions.</li><li>Fixed duplicate logical identities after rename.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.14.0  </span>
+        <span class="release-count">3 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Persistent validation status.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Validation profile now has Recommended, Installed and Optional states.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Validation profile no longer gets unnecessarily proposed again.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.13.0  </span>
+        <span class="release-count">4 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Multi-device Stream Deck support.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Real <code>DeviceType</code> preserved through profile, state, manifest and runtime.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Removed XL-only runtime restriction.</li><li>Prevented fallback to the wrong Stream Deck type.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.12.0  </span>
+        <span class="release-count">4 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Portable SD Bridge state storage.</li><li>Automatic migration from legacy <code>%APPDATA%</code> state.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>SD Bridge data now follows the Streamer.bot installation.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Removed dependency on a fixed Streamer.bot AppData location.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.11.0  </span>
+        <span class="release-count">6 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Persistent Bridge marker.</li><li>Stable <code>bridgeKey</code>.</li><li>Persistent Bridge identity.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Bridge identity separated from display name.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Prevented <code>[Bridge] [Bridge]</code> duplication.</li><li>Setup can safely be run multiple times.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.10.0  </span>
+        <span class="release-count">5 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Integrated profile cleanup.</li><li>Automatic safety backups.</li><li>Setup window auto-scroll.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Setup, validation and cleanup merged into the main Core.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Improved profile removal workflow.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.9.0  </span>
+        <span class="release-count">3 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Automatic Stream Deck shutdown/restart during profile maintenance.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Cleanup process became mostly automatic.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Reduced profile modifications while Stream Deck is actively using them.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.8.0  </span>
+        <span class="release-count">3 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Dedicated 10-page validation profile.</li><li>Automated Bridge/profile/page validation workflow.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Validation profile became a real installation test instead of a simple example.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.7.0  </span>
+        <span class="release-count">4 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Page selection by number.</li><li>Page selection by name.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Runtime page resolution improved.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Invalid page numbers are rejected.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.6.0  </span>
+        <span class="release-count">3 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>User-facing interface standardized in English.</li><li>Setup wording simplified.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Removed inconsistent prototype UI text.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.5.0  </span>
+        <span class="release-count">3 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Setup WPF visual redesign.</li><li>Buttons, spacing and panels standardized.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Improved setup window readability.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.4.0  </span>
+        <span class="release-count">3 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Dedicated WPF setup wizard.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Profiles, Bridge profiles and validation tools separated visually.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Improved UI refresh after plugin generation.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.3.0  </span>
+        <span class="release-count">4 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Detection of existing Bridge profiles.</li><li>Existing Bridge profiles can be reused.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Setup and runtime usage separated more clearly.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul><li>Prevented unnecessary Bridge recreation.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.2.0  </span>
+        <span class="release-count">5 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>Stream Deck XL support.</li><li>First temporary validation profile.</li><li>First validation workflow.</li><li>First profile cleanup workflow.</li></ul>
+        </div>
+        <div class="change-group">
+          <div class="change-label update">Update</div>
+          <ul><li>Bridge profiles became reusable after generation.</li></ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" >
+      <summary>
+        <span class="release-title">v0.1.0  </span>
+        <span class="release-count">7 changes</span>
+      </summary>
+      <div class="release-body">
+        
+        <div class="change-group">
+          <div class="change-label new">New</div>
+          <ul><li>First SD Bridge prototype.</li><li>Streamer.bot C# Core.</li><li><code>SetupBridge()</code>.</li><li><code>SwitchPage()</code>.</li><li>Editable <code>[Bridge]</code> profiles.</li><li>Direct Stream Deck profile/page switching.</li><li>Companion architecture independent from the official Streamer.bot Stream Deck plugin.</li></ul>
+        </div>
+      </div>
+    </details>
+      </section>
+
+      <footer class="footer">
+        <span>SD Bridge v0.19.0</span>
+        <span>Streamer.bot ↔ Stream Deck</span>
+      </footer>
+    </article>
+  </main>
+
+  <aside class="download-rail">
+    <div class="download-card">
+      <h4>Download</h4>
+      <div class="version">SD Bridge v0.19.0</div>
+
+      <a class="download-btn" href="assets/SD-Bridge-v0.19.0.sb" download>
+        <span>
+          <strong>Download Streamer.bot Action</strong><br>
+          <span style="font-weight:600;color:#b9b0d3">.sb</span>
+        </span>
+        <span class="download-icon">↓</span>
+      </a>
+    </div>
+  </aside>
+
+</div>
+
+
+<div class="demo-modal" id="demoModal" aria-hidden="true">
+  <div class="demo-backdrop" data-demo-close></div>
+  <div class="demo-dialog" role="dialog" aria-modal="true" aria-labelledby="demoModalTitle">
+    <div class="demo-dialog-header">
+      <div class="demo-dialog-title">
+        <strong id="demoModalTitle">SD Bridge Demo</strong>
+        <span>1080p60 demo • 1:39 • plays here without leaving the documentation.</span>
+      </div>
+      <button class="demo-close" type="button" aria-label="Close demo" data-demo-close>×</button>
+    </div>
+    <div class="demo-player" id="demoPlayer" data-video-src="assets/SD-Bridge-Demo-v0.19.0.mp4">
+      <video id="demoVideo" controls preload="metadata" playsinline poster="assets/SD-Bridge-Demo-v0.19.0-poster.jpg"></video>
+      <div class="demo-placeholder" id="demoPlaceholder">
+        <div class="play" aria-hidden="true">▶</div>
+        <strong>Demo video</strong>
+        <span>Loading the bundled demo video…</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const GITHUB_REPOSITORY_URL = "https://github.com/lebluxtv/sd-bridge";
+
+function resolveGithubRepository(){
+  if(GITHUB_REPOSITORY_URL) return GITHUB_REPOSITORY_URL.replace(/\/+$/,'');
+  const host = location.hostname.toLowerCase();
+  if(host.endsWith('.github.io')){
+    const owner = host.slice(0, -'.github.io'.length);
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    if(owner && pathParts.length){
+      return `https://github.com/${owner}/${pathParts[0]}`;
+    }
+  }
+  return null;
+}
+
+const githubRepo = resolveGithubRepository();
+document.querySelectorAll('.github-issues-link').forEach(link=>{
+  if(githubRepo){
+    link.href = githubRepo + '/issues/new/choose';
+    link.removeAttribute('aria-disabled');
+  }else{
+    link.textContent = 'open a GitHub Issue (available once published)';
+  }
+});
+document.querySelectorAll('.github-source-link').forEach(link=>{
+  if(githubRepo){
+    link.href = githubRepo;
+    link.removeAttribute('aria-disabled');
+  }else{
+    link.textContent = 'View the source on GitHub (available once published)';
+  }
+});
+
+
+const demoModal=document.getElementById('demoModal');
+const demoOpen=document.getElementById('openDemo');
+const demoVideo=document.getElementById('demoVideo');
+const demoPlayer=document.getElementById('demoPlayer');
+const demoPlaceholder=document.getElementById('demoPlaceholder');
+let lastDemoFocus=null;
+
+function ensureDemoSource(){
+  const src=(demoPlayer?.dataset.videoSrc || '').trim();
+  if(!src || !demoVideo) return false;
+  if(!demoVideo.getAttribute('src')){
+    demoVideo.src=src;
+    demoVideo.style.display='block';
+    if(demoPlaceholder) demoPlaceholder.style.display='none';
+  }
+  return true;
+}
+
+function openDemoModal(){
+  if(!demoModal) return;
+  lastDemoFocus=document.activeElement;
+
+  const hasSource=ensureDemoSource();
+
+  demoModal.classList.add('open');
+  demoModal.setAttribute('aria-hidden','false');
+  document.body.classList.add('demo-open');
+
+  // The Watch demo click is a direct user gesture, so start playback immediately.
+  // Controls remain visible as a fallback if a browser blocks playback for any reason.
+  if(hasSource && demoVideo){
+    demoVideo.currentTime=0;
+    const playPromise=demoVideo.play();
+    if(playPromise && typeof playPromise.catch==='function'){
+      playPromise.catch(()=>{});
+    }
+  }
+
+  demoModal.querySelector('.demo-close')?.focus();
+}
+
+function closeDemoModal(){
+  if(!demoModal) return;
+  demoModal.classList.remove('open');
+  demoModal.setAttribute('aria-hidden','true');
+  document.body.classList.remove('demo-open');
+  if(demoVideo){
+    demoVideo.pause();
+    demoVideo.currentTime=0;
+  }
+  lastDemoFocus?.focus?.();
+}
+
+demoOpen?.addEventListener('click',openDemoModal);
+demoModal?.querySelectorAll('[data-demo-close]').forEach(el=>el.addEventListener('click',closeDemoModal));
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape' && demoModal?.classList.contains('open')) closeDemoModal();
+});
+
+const sections=[...document.querySelectorAll('section[id],div#introduction')];
+const navLinks=[...document.querySelectorAll('.nav-link')];
+const topbar=document.querySelector('.topbar');
+
+function headerHeight(){
+  return Math.ceil(topbar?.getBoundingClientRect().height || 0);
+}
+
+function visualAnchor(section){
+  if(!section) return null;
+  return section.matches('h1,h2,h3') ? section : (section.querySelector('h1,h2') || section);
+}
+
+function setActive(id){
+  navLinks.forEach(a=>{
+    a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+  });
+}
+
+function scrollToSection(id, smooth=true, updateUrl=true){
+  const section=document.getElementById(id);
+  const anchor=visualAnchor(section);
+  if(!section || !anchor) return false;
+
+  // Measure the real sticky header at click time so this stays exact
+  // at every breakpoint / zoom level / viewport size.
+  const y=Math.max(
+    0,
+    Math.round(window.scrollY + anchor.getBoundingClientRect().top - headerHeight())
+  );
+
+  if(updateUrl){
+    history.pushState(null,'','#'+id);
+  }
+
+  setActive(id);
+  window.scrollTo({top:y,behavior:smooth?'smooth':'auto'});
+  return true;
+}
+
+let activeSectionId=null;
+let ticking=false;
+
+function updateActiveSection(){
+  const line=headerHeight()+1;
+  let current=sections[0]?.id || 'introduction';
+
+  for(const section of sections){
+    const anchor=visualAnchor(section);
+    if(anchor && anchor.getBoundingClientRect().top <= line){
+      current=section.id;
+    }else{
+      break;
+    }
+  }
+
+  if(window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8){
+    current=sections[sections.length-1]?.id || current;
+  }
+
+  if(current!==activeSectionId){
+    activeSectionId=current;
+    setActive(current);
+  }
+
+  ticking=false;
+}
+
+function requestActiveUpdate(){
+  if(!ticking){
+    ticking=true;
+    requestAnimationFrame(updateActiveSection);
+  }
+}
+
+window.addEventListener('scroll',requestActiveUpdate,{passive:true});
+window.addEventListener('resize',requestActiveUpdate);
+
+// Every internal anchor uses the same precise positioning logic:
+// sidebar, hero cards, search results, etc.
+document.addEventListener('click',e=>{
+  const link=e.target.closest('a[href^="#"]');
+  if(!link) return;
+
+  const hash=link.getAttribute('href');
+  if(!hash || hash==='#') return;
+
+  const id=decodeURIComponent(hash.slice(1));
+  if(!document.getElementById(id)) return;
+
+  e.preventDefault();
+  scrollToSection(id,true,true);
+
+  if(link.closest('.sidebar')){
+    document.getElementById('sidebar')?.classList.remove('open');
+  }
+});
+
+// Direct URL/hash navigation also lands the TITLE exactly under the header.
+function alignCurrentHash(){
+  const id=decodeURIComponent(location.hash.replace(/^#/,''));
+  if(id){
+    requestAnimationFrame(()=>scrollToSection(id,false,false));
+  }else{
+    requestActiveUpdate();
+  }
+}
+
+window.addEventListener('hashchange',alignCurrentHash);
+window.addEventListener('load',alignCurrentHash);
+
+const sidebar=document.getElementById('sidebar');
+document.getElementById('menuBtn').addEventListener('click',()=>sidebar.classList.toggle('open'));
+
+const search=document.getElementById('docSearch');
+const results=document.getElementById('searchResults');
+const searchable=sections.map(s=>({
+  id:s.id,
+  title:(s.querySelector('h1,h2')?.textContent || 'Introduction').trim(),
+  text:(s.dataset.search||'')+' '+s.textContent
+}));
+
+function renderSearch(){
+  const q=search.value.trim().toLowerCase();
+  if(!q){results.classList.remove('show');results.innerHTML='';return}
+  const found=searchable.filter(x=>x.text.toLowerCase().includes(q)).slice(0,8);
+  results.innerHTML=found.length?found.map(x=>`<a class="result" href="#${x.id}"><strong>${x.title}</strong><span>${x.id.replaceAll('-',' ')}</span></a>`).join(''):'<div class="result"><span>No matching documentation section.</span></div>';
+  results.classList.add('show');
+}
+search.addEventListener('input',renderSearch);
+results.addEventListener('click',()=>{results.classList.remove('show');search.value=''});
+document.addEventListener('keydown',e=>{
+  if(e.key==='/' && document.activeElement!==search){e.preventDefault();search.focus()}
+  if(e.key==='Escape'){results.classList.remove('show');search.blur();sidebar.classList.remove('open')}
+});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.search-wrap')) results.classList.remove('show');
+});
+</script>
+</body>
+</html>

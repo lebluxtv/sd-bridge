@@ -1,0 +1,41 @@
+{
+  "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+  "UUID": "tv.leblux.streamerbot-plugin-addon",
+  "Name": "SD Bridge",
+  "Version": "1.19.0.0",
+  "Author": "LeBlux",
+  "Description": "Lets Streamer.bot switch Stream Deck profiles and pages through editable Bridge profiles. Companion addon; does not replace the official Streamer.bot plugin.",
+  "Actions": [
+    {
+      "Name": "Bridge Runtime",
+      "UUID": "tv.leblux.streamerbot-plugin-addon.bridge",
+      "Tooltip": "Internal SD Bridge runtime",
+      "Icon": "imgs/actions/bridge/icon",
+      "Controllers": [
+        "Keypad"
+      ],
+      "VisibleInActionsList": false,
+      "States": [
+        {
+          "Image": "imgs/actions/bridge/key"
+        }
+      ]
+    }
+  ],
+  "CodePath": "bin/plugin.js",
+  "Icon": "imgs/plugin/icon",
+  "SDKVersion": 2,
+  "Software": {
+    "MinimumVersion": "6.6"
+  },
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Nodejs": {
+    "Version": "20"
+  },
+  "Profiles": []
+}
