@@ -472,7 +472,7 @@ body.demo-open{overflow:hidden}
     </div>
 
     <div class="header-actions">
-      <span class="header-pill">v0.19.0</span>
+      <span class="header-pill">v0.20.0</span>
       <a class="header-pill" href="https://docs.streamer.bot/" target="_blank" rel="noopener">Streamer.bot Docs ↗</a>
       <button id="menuBtn" class="menu-btn" aria-label="Open navigation">☰</button>
     </div>
@@ -512,7 +512,7 @@ body.demo-open{overflow:hidden}
     <article class="content">
       <div id="introduction" data-search="Introduction overview addon Streamer.bot Stream Deck profiles pages">
         <div class="breadcrumbs"><span>SD Bridge</span><span>›</span><span>Overview</span></div>
-        <span class="version-chip">v0.19.0</span>
+        <span class="version-chip">v0.20.0</span>
         <h1>SD Bridge</h1>
         <p class="lead">A Streamer.bot addon for directly switching the <strong>profile</strong> and <strong>page</strong> displayed on a Stream Deck.</p>
 
@@ -550,13 +550,14 @@ body.demo-open{overflow:hidden}
         <p>The <code>[Bridge]</code> version becomes the working profile you continue editing in the Stream Deck application. The live Bridge profile remains the source of truth when SD Bridge is updated later.</p>
       </section>
 
-      <section id="tested-on" data-search="Tested hardware Windows 11 Stream Deck XL 7.5.1 Streamer.bot 1.0.7">
+      <section id="tested-on" data-search="Tested hardware Windows 11 Stream Deck XL 7.6.1 7.5.1 Streamer.bot 1.0.7">
         <h2>Tested on</h2>
         <table class="spec-table">
           <tr><th>Platform</th><td>Windows 11</td></tr>
           <tr><th>Hardware</th><td>Stream Deck XL</td></tr>
-          <tr><th>Stream Deck App</th><td>v7.5.1</td></tr>
+          <tr><th>Stream Deck App</th><td>v7.6.1 (23033) — upgrade path tested; previously v7.5.1</td></tr>
           <tr><th>Streamer.bot</th><td>v1.0.7</td></tr>
+           <tr><th>Validation</th><td>v0.19.0 → v0.20.0 companion/profile installation (13 Nov 2026)</td></tr>
         </table>
         <div class="callout warning">
           <strong>Hardware feedback wanted</strong>
@@ -574,7 +575,7 @@ body.demo-open{overflow:hidden}
           <div class="step">
             <h3>Import the Streamer.bot action</h3>
             <p>Use the <strong>Download Streamer.bot Action</strong> button in the Download panel on the right, then import the <strong>.sb</strong> file into Streamer.bot.</p>
-            <a class="inline-download" href="assets/SD-Bridge-v0.19.0.sb" download>
+            <a class="inline-download" href="assets/SD-Bridge-v0.20.0.sb" download>
               <span>Download Streamer.bot Action</span>
               <span aria-hidden="true">↓</span>
             </a>
@@ -755,11 +756,34 @@ sdBridge.page = 2</code></pre>
 
       <section id="changelog" data-search="Changelog version history new update fix">
         <h2>Changelog</h2>
-        <p>Version history from the first SD Bridge prototype to v0.19.0.</p>
+        <p>Version history from the first SD Bridge prototype to v0.20.0.</p>
         
     <details class="release" open>
       <summary>
-        <span class="release-title">v0.19.0  <span class="latest-tag">Latest</span></span>
+        <span class="release-title">v0.20.0 <span class="latest-tag">Latest</span></span>
+        <span class="release-count">9 changes</span>
+      </summary>
+      <div class="release-body">
+        <div class="change-group">
+          <div class="change-label fix">Fix</div>
+          <ul>
+            <li>Compare full companion plugin versions (1.18.0.20 is older than 1.19.0.18).</li>
+            <li>Generate companion version 1.20.0.x and validate the plugin package before updating.</li>
+            <li>Keep a backup of the previous installer when regenerating.</li>
+            <li>Verify the installed manifest and profile configuration instead of waiting indefinitely.</li>
+            <li>Verify that the new Node.js runtime is connected, not merely that files exist.</li>
+            <li>Automatically request missing bundled profiles via the official SDK after an update; manual retry remains available.</li>
+            <li>Fix the WPF installation watcher and improve diagnostics.</li>
+            <li>Fix Streamer.bot Core compilation error CS0165 (uninitialized readinessIssue).</li>
+            <li>The v0.19.0 → v0.20.0 update workflow was successfully confirmed on Stream Deck XL / app 7.6.1 (23033).</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
+    <details class="release" open>
+      <summary>
+        <span class="release-title">v0.19.0  </span>
         <span class="release-count">23 changes</span>
       </summary>
       <div class="release-body">
@@ -1175,7 +1199,7 @@ sdBridge.page = 2</code></pre>
       </section>
 
       <footer class="footer">
-        <span>SD Bridge v0.19.0</span>
+        <span>SD Bridge v0.20.0</span>
         <span>Streamer.bot ↔ Stream Deck</span>
       </footer>
     </article>
@@ -1184,9 +1208,9 @@ sdBridge.page = 2</code></pre>
   <aside class="download-rail">
     <div class="download-card">
       <h4>Download</h4>
-      <div class="version">SD Bridge v0.19.0</div>
+      <div class="version">SD Bridge v0.20.0</div>
 
-      <a class="download-btn" href="assets/SD-Bridge-v0.19.0.sb" download>
+      <a class="download-btn" href="assets/SD-Bridge-v0.20.0.sb" download>
         <span>
           <strong>Download Streamer.bot Action</strong><br>
           <span style="font-weight:600;color:#b9b0d3">.sb</span>

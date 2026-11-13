@@ -22,6 +22,21 @@ const root = path.resolve(binDir, '..');
 const logDir = path.join(root, 'logs');
 try { fs.mkdirSync(logDir, { recursive: true }); } catch {}
 const logFile = path.join(logDir, 'sd-bridge.log');
+const statusFile = path.join(root, 'runtime-status.json');
+let pluginVersion = '<unavailable>';
+try { pluginVersion = JSON.parse(fs.readFileSync(path.join(root, 'manifest.json'), 'utf8')).Version; } catch {}
+let runtimeConnected = false;
+let runtimeConfig = [];
+function writeRuntimeStatus() {
+  try {
+    fs.writeFileSync(statusFile, JSON.stringify({
+      pid: process.pid, version: pluginVersion, startedUtc: runtimeStartedUtc,
+      updatedUtc: new Date().toISOString(), connected: runtimeConnected,
+      profiles: runtimeConfig
+    }, null, 2), 'utf8');
+  } catch (err) { console.error(`SD Bridge runtime-status write failed: ${err}`); }
+}
+const runtimeStartedUtc = new Date().toISOString();
 function log(level, msg) {
   const line = `${new Date().toISOString()} ${level.padEnd(5)} ${msg}`;
   try { fs.appendFileSync(logFile, line + '\n', 'utf8'); } catch {}
@@ -34,6 +49,8 @@ try {
 } catch (e) {
   log('ERROR', `Cannot read bridge-config.json: ${e}`);
 }
+runtimeConfig = (config.profiles || []).map(p => ({ key: p.key, sdkProfile: p.sdkProfile }));
+writeRuntimeStatus();
 
 const devices = new Map();
 for (const d of (info.devices || [])) {
@@ -185,6 +202,8 @@ function onSocketData(chunk) {
       return;
     }
     handshaken = true;
+    runtimeConnected = true;
+    writeRuntimeStatus();
     log('INFO', `Connected to Stream Deck SDK on port ${port}`);
     sendJson({ event: registerEvent, uuid: pluginUUID });
   }
@@ -218,6 +237,8 @@ function connect() {
   socket.on('close', () => {
     log('WARN', 'Stream Deck SDK socket closed; reconnecting');
     handshaken = false;
+    runtimeConnected = false;
+    writeRuntimeStatus();
     setTimeout(connect, 1000);
   });
 }

@@ -1,3 +1,36 @@
+# SD Bridge v0.20.0 — companion update & profile recovery (13 Nov 2026)
+
+## Correctifs
+- **Compilation Streamer.bot** : initialise `readinessIssue` avant la vérification conditionnelle du compagnon (erreur `CS0165` lors de la compilation du Core).
+- **Version complète** : compare `MAJOR.MINOR.PATCH.BUILD`, sans confondre 1.18.0.20 et 1.19.0.18. Nouvelle série du compagnon `1.20.0.x`; incrément basé sur l'état, le plugin installé et le package déjà présent.
+- **Installation sûre** : génère le ZIP dans un fichier temporaire, inspecte le manifeste/config/profils, puis remplace le package atomiquement en conservant une sauvegarde `.bak`.
+- **Validation réelle** : vérifie la version ET la liste exacte des profils du manifeste et de `bridge-config.json` du plugin installé.
+- **Runtime confirmé** : le plugin Node.js écrit `runtime-status.json` (PID, connexion SDK, version et profils chargés). La validation attend la bonne version effectivement active, pas seulement les fichiers sur le Bureau.
+- **Import de profil manquant** : dès que la nouvelle version est chargée, envoie une seule requête SDK `switchToProfile` par profil manquant, sans boucler sans fin; confirmation Elgato possible. Bouton manuel « Install missing » pour réessayer.
+- **Verify** : indique clairement si le blocage vient de la mise à jour, du runtime ou de l'import de profil. Diagnostics accessibles avant validation.
+- **Surveillance WPF** : accès à `Window.IsVisible` exclusivement via Dispatcher ; plus de limite de 180 s tant que la fenêtre reste ouverte.
+
+## Compatibilité et validation
+- Migration v0.19.0 → v0.20.0 effectuée sans désinstaller le plugin existant (confirmation du 13 novembre 2026).
+- Le package public `.sb` repose sur l’export Streamer.bot effectivement utilisé pendant cette validation ; sa version de métadonnées a été harmonisée en `0.20.0` sans changer son code embarqué.
+- Le Core source public est extrait directement de ce même export, avec encodage UTF-8 intact.
+
+## Limites et sécurité
+- Pas de suppression ni de manipulation forcée des dossiers `ProfilesV3`/`ProfilesV2` lors de l'installation.
+- Le mécanisme d'import de profils après mise à jour dépend de la confirmation d'Elgato.
+- Ne pas supprimer le plugin ou les profils existants. Sauvegarder le dossier `%APPDATA%\Elgato\StreamDeck` avant les premiers tests.
+- **Validation utilisateur (13/11/2026)** : migration et installation du compagnon confirmées sur Windows 11 / Stream Deck XL / Stream Deck 7.6.1 (23033). Ne pas extrapoler cette validation aux autres modèles et configurations multi-appareils.
+
+# v0.19.1 PREVIEW — profile import recovery (13 November 2026)
+
+- Add explicit **Install missing** action during the installation check: sends a documented SDK `switchToProfile` command for ONE absent plugin-bundled profile at a time. Elgato may ask the user to confirm import. No forced restart or direct profile-directory mutation.
+- Add **Diagnostics** button before successful installation; exports an existing sanitized support report.
+- Fix potential cross-thread access of `Window.IsVisible` from the installation watcher. Keep watching while the dialog stays open instead of stopping after 180 seconds.
+- Make **Verify** show the missing-profile count and clarify it is only a read-only rescan.
+- Companion plugin package version is bumped to 1.19.1.<build>.
+
+**PREVIEW / not hardware validated:** Code reviewed and .sb round-trip checked; must be tested with Stream Deck 7.6.1 (23033). Preserve originals and keep an external Stream Deck profile backup. The native Stream Deck SDK installation prompt is controlled by Elgato, not by SD Bridge.
+
 # SD Bridge — Changelog
 
 ## v0.19.0

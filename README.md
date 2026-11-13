@@ -1,6 +1,6 @@
 # SD Bridge
 
-**Current version: v0.19.0**
+**Current version: v0.20.0**
 
 SD Bridge lets **Streamer.bot directly switch the profile and page displayed on a Stream Deck**.
 
@@ -10,7 +10,7 @@ Streamer.bot can interact with Stream Deck buttons, but it cannot directly contr
 
 ## How to use it
 
-1. Download [**SD-Bridge-v0.19.0.sb**](./SD-Bridge-v0.19.0.sb) and import it into Streamer.bot.
+1. Download [**SD-Bridge-v0.20.0.sb**](./SD-Bridge-v0.20.0.sb) and import it into Streamer.bot.
 2. Select `01 - Streamer.bot StreamDeck Plugin Addon - Setup Bridge`, right-click **Test**, then choose **Test Trigger**.
 3. In the SD Bridge WPF window, select the Stream Deck profile(s) to bridge. On a first Stream Deck XL validation, keep **Bridge Validation Test** enabled.
 4. Click **Generate plugin** / **Update plugin**. SD Bridge creates the companion `.streamDeckPlugin` package and opens it automatically.
@@ -39,7 +39,7 @@ Two example actions are included in the Streamer.bot import:
 
 ## Tested on
 
-**Windows 11 • Stream Deck XL • Stream Deck App v7.5.1 • Streamer.bot v1.0.7**
+**Windows 11 • Stream Deck XL • Stream Deck App v7.6.1 (23033) (previously v7.5.1) • Streamer.bot v1.0.7**
 
 ## Hardware support and feedback
 
@@ -52,7 +52,7 @@ SD Bridge has currently been physically tested on **Stream Deck XL**. If you tes
 
 ## Repository-ready package
 
-This package is ready to be used as the content of the `sd-bridge` GitHub repository. The official Streamer.bot action export is included at the repository root as `SD-Bridge-v0.19.0.sb`. An identical copy is also bundled under `site/assets/` so the documentation site's download button works as a self-contained static site.
+This package is ready to be used as the content of the `sd-bridge` GitHub repository. The official Streamer.bot action export is included at the repository root as `SD-Bridge-v0.20.0.sb`. An identical copy is also bundled under `site/assets/` so the documentation site's download button works as a self-contained static site.
 
 ## Origin and credits
 
@@ -68,16 +68,16 @@ SD Bridge is a separate community project and does not replace the official plug
 ## Source layout
 
 ```text
-SD-Bridge-v0.19.0/
-├─ SD-Bridge-v0.19.0.sb
-├─ SD-Bridge-Core-v0.19.0.cs
+SD-Bridge-v0.20.0/
+├─ SD-Bridge-v0.20.0.sb
+├─ SD-Bridge-Core-v0.20.0.cs
 ├─ README.md
 ├─ README_FR.md
 ├─ CHANGELOG.md
 ├─ site/
 │  ├─ index.html
 │  └─ assets/
-│     ├─ SD-Bridge-v0.19.0.sb
+│     ├─ SD-Bridge-v0.20.0.sb
 │     ├─ SD-Bridge-Demo-v0.19.0.mp4
 │     ├─ SD-Bridge-Demo-v0.19.0-poster.jpg
 │     └─ sd-bridge-logo.png
@@ -104,7 +104,7 @@ SD-Bridge-v0.19.0/
 
 The files under `src/branding/` are the canonical official SD Bridge logo assets. The logo design must not be altered; the WPF, plugin and website use this same identity.
 
-`SD-Bridge-Core-v0.19.0.cs` is intentionally distributed as a single Streamer.bot C# Core, but it embeds several companion assets as Base64. The readable files are provided so the generated plugin can be inspected, modified, and verified:
+`SD-Bridge-Core-v0.20.0.cs` is intentionally distributed as a single Streamer.bot C# Core, but it embeds several companion assets as Base64. The readable files are provided so the generated plugin can be inspected, modified, and verified:
 
 - `src/plugin/bin/plugin.js` → `PluginJsBase64`
 - `src/plugin/imgs/plugin/icon.png` → `PluginIconBase64`
@@ -115,3 +115,14 @@ The files under `src/branding/` are the canonical official SD Bridge logo assets
 The Stream Deck `manifest.json` is generated dynamically by the C# Core because the plugin version and Bridge profile list depend on the current setup. `src/plugin/manifest.template.json` is provided as a readable reference.
 
 The validation `.streamDeckProfile` is itself an archive. Its raw internal GUID folders are intentionally not duplicated in the public package.
+
+
+## v0.20.0 profile recovery
+
+If a `[Bridge]` profile is missing after updating the companion plugin, use **Install missing** to request installation via Elgato's documented SDK switch-to-profile command. Approve the Stream Deck prompt if one appears. This can temporarily change the active Stream Deck profile. The **Diagnostics** button is now available even before full validation. **Verify** is a read-only rescan. Keep your original profiles until full validation. The v0.19.0 → v0.20.0 companion update and missing-profile recovery workflow was successfully tested on Windows 11 with Stream Deck XL and Stream Deck app 7.6.1 (23033) on 13 November 2026. Other hardware models and multi-device scenarios have not all been validated.
+
+## Upgrading from 0.19.0 to 0.20.0 (no plugin uninstallation)
+
+Back up your Stream Deck profiles and the current Streamer.bot action, import the new `.sb`, run the new Setup Bridge, select any original profile still missing its `[Bridge]` copy, generate/update the plugin, accept the Elgato plugin update, then accept any missing profile installation prompt. Verify confirms the matching manifest, config and live Node.js runtime; if runtime stays stale, restart only the Stream Deck application and click Verify. See README_FR.md for full steps.
+
+**Important:** `SD-Bridge.streamDeckPlugin` is generated locally by the Core during Setup; it is not bundled as a pre-configured plugin in this source archive.
